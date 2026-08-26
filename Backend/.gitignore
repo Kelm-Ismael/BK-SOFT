@@ -1,6 +1,8 @@
 # Dependencias
 node_modules/
 
+prisma/migrations/dev.db* # prisma genera un archivo de base de datos SQLite en dev, no lo subas al repo
+
 # Variables de entorno (MUY IMPORTANTE)
 .env
 .env.local
