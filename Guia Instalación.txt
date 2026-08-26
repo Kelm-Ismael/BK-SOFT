@@ -1,0 +1,14 @@
+# 1. Base de datos
+postgresql pdadmin4
+
+# 2. Backend
+cd backend
+npm init -y
+npm install express cors @prisma/client dotenv
+npm install -D typescript prisma ts-node-dev @types/express @types/cors @types/node
+npx prisma init
+npx tsc --init
+
+# 3. Frontend
+cd ../front
+npm install -g live-server   # opcional, o usar extensión de VS Code

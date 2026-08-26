@@ -1,0 +1,43 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (MUY IMPORTANTE)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build (por si luego compilas TS)
+dist/
+build/
+*.tsbuildinfo
+
+# Archivos temporales
+tmp/
+temp/
+.cache/
+
+# Coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Uploads / archivos generados en runtime (fotos de perfil, etc.)
+uploads/
+
+# Si usás Prisma con SQLite en dev
+*.sqlite
+*.sqlite3
+
+# Certificados / claves locales (por si en algún sprint usás JWT con .pem)
+*.pem
+*.key
