@@ -1,0 +1,87 @@
+COMANDOS GIT MÁS USADOS
+
+# Inicializar repositorio
+git init
+
+# Clonar repositorio
+git clone URL
+
+# Ver estado de archivos
+git status
+
+# Agregar archivos
+git add .
+
+# Guardar cambios
+git commit -m "mensaje"
+
+# Subir cambios
+git push
+
+# Traer cambios
+git pull
+
+# Ver historial
+git log
+
+# Crear rama
+git branch nombre-rama
+----------------------------------------->
+# Cambiar de rama (moderno) ************
+git switch nombre-rama
+
+# Cambiar de rama (forma antigua)
+git checkout nombre-rama
+
+# Crear y cambiar de rama (moderno)*****
+git switch -c nombre-rama
+
+# Crear y cambiar de rama (forma antigua)
+git checkout -b nombre-rama
+
+# Ver ramas
+git branch
+
+# Unir ramas
+git merge nombre-rama
+
+# Eliminar rama
+git branch -d nombre-rama
+
+# Configurar usuario
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu@email.com"
+
+
+ESTRUCTURA DE RAMAS:
+
+main
+└── develop
+    └── feature/sprint-001-registro
+--------------------------------------
+01) git switch para cambiar de rama
+02) git switch -c develop      ---> crea la rama develop en forma local
+03) git push -u origin develop ---> sube la rama a github 
+04) git merge para que develop tenga lo mismo que main ahora despues tengoq que hacer al reves para que main contenga lo de develop
+
+# Crear funcionalidad desde develop
+git switch develop
+git switch -c feature/registro-sprint001
+git push -u origin feature/registro-sprint00
+
+
+FLUJO BÁSICO:
+
+git switch main
+git pull
+git switch develop
+git switch -c feature/sprint-001-registro
+
+git add .
+git commit -m "feat: agregar registro de usuarios"
+git push -u origin feature/sprint-001-registro
+
+
+FLUJO BÁSICO DE CAMBIOS:
+
+git add . → git commit -m "mensaje" → git push

@@ -1,35 +1,31 @@
-# ================================================================
-# 1. BACKEND
-# ================================================================
+================================================================
+1. BACKEND
+================================================================
 cd backend
 
 # Inicializa el proyecto Node (crea package.json)
 npm init -y
 
 # --- Dependencias de PRODUCCIÓN (necesarias para que la app corra) ---
-npm install express cors @prisma/client dotenv
+npm install express cors pg dotenv
 
-#   express        -> framework HTTP para armar los endpoints (POST /registro, etc.)
-#   cors           -> habilita que el frontend (otro origen/puerto) le pegue a esta API
-#   @prisma/client -> cliente generado por Prisma para consultar la DB desde el código
-#   dotenv         -> carga las variables del archivo .env (DATABASE_URL, API keys, etc.)
+#    express    -> framework HTTP para armar los endpoints (POST /registro, etc.)
+#    cors       -> habilita que el frontend (otro origen/puerto) le pegue a esta API
+#    pg         -> driver nativo de PostgreSQL para Node.js
+#    dotenv     -> carga las variables del archivo .env (DATABASE_URL, etc.)
 
 # --- Dependencias de DESARROLLO (solo se usan mientras programás) ---
-npm install -D typescript prisma tsx @types/express @types/cors @types/node
+npm install -D typescript tsx @types/express @types/cors @types/node @types/pg
 
-#   typescript      -> compilador/tipado de TS
-#   prisma          -> CLI de Prisma (migraciones, generate, studio) — distinto de @prisma/client
-#   tsx             -> ejecuta .ts directo en dev con recarga automática (reemplaza ts-node-dev)
-#   @types/express  -> tipos de TS para Express
-#   @types/cors     -> tipos de TS para cors
-#   @types/node     -> tipos de TS para las APIs nativas de Node (fs, crypto, etc.)
-
-# Genera prisma/schema.prisma + prisma.config.ts + .env de ejemplo
-npx prisma init
+#    typescript     -> compilador/tipado de TS
+#    tsx            -> ejecuta .ts directo en dev con recarga automática
+#    @types/express -> tipos de TS para Express
+#    @types/cors    -> tipos de TS para cors
+#    @types/node    -> tipos de TS para las APIs nativas de Node (fs, crypto, etc.)
+#    @types/pg      -> tipos de TS para el driver de PostgreSQL
 
 # Genera tsconfig.json (configuración del compilador TS)
 npx tsc --init
-
 
 # ================================================================
 # 2. FRONTEND
@@ -39,3 +35,4 @@ cd ../front
 # Servidor local para levantar el HTML/CSS/JS estático mientras desarrollás
 # (alternativa: extensión "Live Server" de VS Code, hace lo mismo sin instalar nada global)
 npm install -g live-server
+
