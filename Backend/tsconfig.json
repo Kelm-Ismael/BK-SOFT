@@ -9,11 +9,9 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    "types": ["node"],
+    "lib": ["esnext"],
+    // npm install -D @types/node (ya lo tenés instalado)
 
     // Other Outputs
     "sourceMap": true,
@@ -34,7 +32,6 @@
 
     // Recommended Options
     "strict": true,
-    "jsx": "react-jsx",
     "verbatimModuleSyntax": false, //para import y export de archivos .ts y .tsx
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,

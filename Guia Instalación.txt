@@ -16,6 +16,8 @@ npm install express cors pg dotenv
 
 # --- Dependencias de DESARROLLO (solo se usan mientras programás) ---
 npm install -D typescript tsx @types/express @types/cors @types/node @types/pg
+npm install bcryptjs
+
 
 #    typescript     -> compilador/tipado de TS
 #    tsx            -> ejecuta .ts directo en dev con recarga automática
@@ -23,7 +25,7 @@ npm install -D typescript tsx @types/express @types/cors @types/node @types/pg
 #    @types/cors    -> tipos de TS para cors
 #    @types/node    -> tipos de TS para las APIs nativas de Node (fs, crypto, etc.)
 #    @types/pg      -> tipos de TS para el driver de PostgreSQL
-
+#    npm install --save-dev @types/bcryptjs
 # Genera tsconfig.json (configuración del compilador TS)
 npx tsc --init
 
