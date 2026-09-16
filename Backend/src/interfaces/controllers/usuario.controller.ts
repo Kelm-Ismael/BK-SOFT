@@ -1,6 +1,8 @@
+// Archivo NUEVO — issue #20
 import { Request, Response } from "express";
 import { registrarUsuarioCasoDeUso } from "../../application/use-cases/registrarUsuario.js";
 import { validarTokenCasoDeUso } from "../../application/use-cases/validarToken.js";
+import { reenviarCodigoCasoDeUso } from "../../application/use-cases/reenviarCodigo.js";
 
 // POST /registro
 export const registrarUsuarioController = async (req: Request, res: Response) => {
@@ -27,11 +29,14 @@ export const registrarUsuarioController = async (req: Request, res: Response) =>
       return;
     }
 
-    if (
+     if (
       error.message === "El email es obligatorio" ||
       error.message === "La contraseña debe tener al menos 6 caracteres" ||
       error.message === "El nombre es obligatorio" ||
-      error.message === "El apellido es obligatorio"
+      error.message === "El apellido es obligatorio" ||
+      error.message === "La fecha de nacimiento es obligatoria" ||
+      error.message === "El celular es obligatorio"
+      
     ) {
       res.status(400).json({ message: error.message });
       return;
@@ -41,17 +46,21 @@ export const registrarUsuarioController = async (req: Request, res: Response) =>
   }
 };
 
-// GET /verificar-cuenta/:token
+// POST /verificar-cuenta  { email, codigo }
 export const verificarCuentaController = async (req: Request, res: Response) => {
   try {
-    const token = req.params.token;
+    const { email, codigo } = req.body;
 
-    if (!token || typeof token !== "string") {
-      res.status(400).json({ message: "Falta el token" });
+    if (!email || typeof email !== "string") {
+      res.status(400).json({ message: "Falta el email" });
+      return;
+    }
+    if (!codigo || typeof codigo !== "string") {
+      res.status(400).json({ message: "Falta el código" });
       return;
     }
 
-    const usuario = await validarTokenCasoDeUso(token);
+    const usuario = await validarTokenCasoDeUso(email, codigo);
 
     res.status(200).json({
       mensaje: "Cuenta verificada correctamente. Ya podés iniciar sesión.",
@@ -60,19 +69,56 @@ export const verificarCuentaController = async (req: Request, res: Response) => 
   } catch (error: any) {
     console.error(error);
 
-    if (error.message === "Token inválido") {
+    if (error.message === "No existe una cuenta registrada con ese email") {
       res.status(404).json({ message: error.message });
       return;
     }
 
     if (
-      error.message === "Este token ya fue utilizado" ||
-      error.message === "El token expiró, tenés que registrarte de nuevo"
+      error.message === "No hay ningún código pendiente para esta cuenta" ||
+      error.message === "El código expiró, tenés que pedir uno nuevo" ||
+      error.message === "El código ingresado es incorrecto" ||
+      error.message === "Superaste el máximo de intentos, tenés que pedir un código nuevo"
     ) {
       res.status(400).json({ message: error.message });
       return;
     }
 
     res.status(500).json({ message: "Error al verificar la cuenta" });
+  }
+};
+
+// POST /reenviar-codigo  { email }
+export const reenviarCodigoController = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email || typeof email !== "string") {
+      res.status(400).json({ message: "Falta el email" });
+      return;
+    }
+
+    await reenviarCodigoCasoDeUso(email);
+
+    res.status(200).json({ mensaje: "Te enviamos un nuevo código a tu correo." });
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.message === "No existe una cuenta registrada con ese email") {
+      res.status(404).json({ message: error.message });
+      return;
+    }
+
+    if (error.message === "Esta cuenta ya está verificada") {
+      res.status(409).json({ message: error.message });
+      return;
+    }
+
+    if (typeof error.message === "string" && error.message.startsWith("Esperá ")) {
+      res.status(429).json({ message: error.message });
+      return;
+    }
+
+    res.status(500).json({ message: "Error al reenviar el código" });
   }
 };

@@ -1,3 +1,16 @@
+npx tsc --noEmit para verificar que no haya errores en el log.
+npm test para hacer test de backend con framework jest
+-----------------------------------------------------------
+para test de email
+    reenviar #1
+curl -i -X POST http://localhost:3000/reenviar-codigo -H "Content-Type: application/json" -d '{"email":"el-email-que-quieras@gmail.com"}'
+
+    verificar cuenta
+curl -i -X POST http://localhost:3000/verificar-cuenta -H "Content-Type: application/json" -d '{"email":"tu-email-real@gmail.com","codigo":"EL_CODIGO_QUE_TE_LLEGO"}'
+
+    registro
+curl -i -X POST http://localhost:3000/registro -H "Content-Type: application/json" -d '{"email":"tu-email-real@gmail.com","password":"123456","nombre":"Test","apellido":"Prueba","fecha_nacimiento":"2000-01-01","celular":"+543794000000"}'
+
 ================================================================
 1. BACKEND
 ================================================================
@@ -17,6 +30,8 @@ npm install express cors pg dotenv
 # --- Dependencias de DESARROLLO (solo se usan mientras programás) ---
 npm install -D typescript tsx @types/express @types/cors @types/node @types/pg
 npm install bcryptjs
+npm install nodemailer && npm install --save-dev @types/nodemailer
+npm install --save-dev jest ts-jest @types/jest     --> (framework)
 
 
 #    typescript     -> compilador/tipado de TS
@@ -26,6 +41,9 @@ npm install bcryptjs
 #    @types/node    -> tipos de TS para las APIs nativas de Node (fs, crypto, etc.)
 #    @types/pg      -> tipos de TS para el driver de PostgreSQL
 #    npm install --save-dev @types/bcryptjs
+#   npm install nodemailer && npm install --save-dev @types/nodemailer
+
+
 # Genera tsconfig.json (configuración del compilador TS)
 npx tsc --init
 
