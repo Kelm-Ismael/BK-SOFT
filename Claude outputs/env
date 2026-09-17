@@ -1,42 +1,3 @@
-# # --- Conexión a PostgreSQL ---
-# PORT=3000
-# usuario_db=postgres
-# contraseña_db=476235
-# nombre_db=bksoft
-# puerto_db=5432
-
-# # Esta es la que realmente usa pg.Pool en config/db.ts
-# # Formato: postgresql://<usuario>:<contraseña>@<host>:<puerto>/<basededatos>
-# DATABASE_URL="postgresql://postgres:476235@localhost:5432/bksoft"
-
-# EMAIL_USER="klemleamsi@gmail.com"
-# EMAIL_PASS="otcs zywx hnqb buac"
-
-
-# # ================================================================
-# # Email — Resend (https://resend.com)
-# # ================================================================
-# RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
-# RESEND_FROM_EMAIL="no-reply@tudominio.com"
-
-# # ================================================================
-# # WhatsApp — Twilio (https://www.twilio.com)
-# # ================================================================
-# TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-# TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-# TWILIO_WHATSAPP_FROM="whatsapp:+14155238886"
-
-# # ================================================================
-# # Token de confirmación de cuenta
-# # ================================================================
-# TOKEN_EXPIRATION_HOURS=24
-
-# # ================================================================
-# # URL base del frontend (para armar el link del mail/WhatsApp)
-# # ================================================================
-# FRONTEND_URL="http://localhost:5500"
-
-
 # --- Conexión a PostgreSQL ---
 PORT=3000
 usuario_db=postgres
@@ -81,4 +42,4 @@ FRONTEND_URL="http://localhost:5500"
 # Client ID de OAuth 2.0 creado en Google Cloud Console > APIs & Services >
 # Credentials > Create Credentials > OAuth client ID > Web application.
 # Authorized JavaScript origins: http://localhost:3000
-GOOGLE_CLIENT_ID="596833095283-71h4q6ua9to2otsi7lv73bgv6arseq8g.apps.googleusercontent.com"
+GOOGLE_CLIENT_ID=""

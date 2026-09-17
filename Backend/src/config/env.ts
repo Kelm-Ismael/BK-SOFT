@@ -13,4 +13,6 @@ export const contraseña_db = process.env.contraseña_db || "476235";
 export const nombre_db = process.env.nombre_db || "bksoft"; //nombre db
 export const puerto_db = process.env.puerto_db || "5432"; //puerto de PostgresSQL
 
-
+// NUEVO — Google SSO (Sign in with Google). Completar en el .env con el
+// Client ID real que te da Google Cloud Console (APIs & Services > Credentials).
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';

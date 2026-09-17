@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { registrarUsuarioCasoDeUso } from "../../application/use-cases/registrarUsuario.js";
 import { validarTokenCasoDeUso } from "../../application/use-cases/validarToken.js";
 import { reenviarCodigoCasoDeUso } from "../../application/use-cases/reenviarCodigo.js";
+import { iniciarRegistroGoogleCasoDeUso } from "../../application/use-cases/iniciarRegistroGoogle.js";
+import { registrarUsuarioGoogleCasoDeUso } from "../../application/use-cases/registrarUsuarioGoogle.js";
 
 // POST /registro
 export const registrarUsuarioController = async (req: Request, res: Response) => {
@@ -31,12 +33,13 @@ export const registrarUsuarioController = async (req: Request, res: Response) =>
 
      if (
       error.message === "El email es obligatorio" ||
-      error.message === "La contraseña debe tener al menos 6 caracteres" ||
+      error.message === "La contraseña es obligatoria" ||
+      error.message === "La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número" ||
       error.message === "El nombre es obligatorio" ||
       error.message === "El apellido es obligatorio" ||
       error.message === "La fecha de nacimiento es obligatoria" ||
       error.message === "El celular es obligatorio"
-      
+
     ) {
       res.status(400).json({ message: error.message });
       return;
@@ -120,5 +123,85 @@ export const reenviarCodigoController = async (req: Request, res: Response) => {
     }
 
     res.status(500).json({ message: "Error al reenviar el código" });
+  }
+};
+
+// POST /registro/google/verificar  { idToken }
+// Paso 1 del registro con Google: verifica el token y avisa si la cuenta
+// ya existe. Si es cuenta nueva, devuelve el perfil de Google (email,
+// nombre, apellido, googleId) para que el frontend complete lo que falta.
+export const iniciarRegistroGoogleController = async (req: Request, res: Response) => {
+  try {
+    const { idToken } = req.body;
+
+    const perfil = await iniciarRegistroGoogleCasoDeUso(idToken);
+
+    res.status(200).json({ perfil });
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.message === "Ya existe una cuenta registrada con ese email. Iniciá sesión en su lugar.") {
+      res.status(409).json({ message: error.message });
+      return;
+    }
+
+    if (
+      error.message === "Falta el token de Google" ||
+      error.message === "El token de Google no es válido o expiró" ||
+      error.message === "El token de Google no corresponde a esta aplicación" ||
+      error.message === "Tu cuenta de Google no tiene el email verificado"
+    ) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+
+    res.status(500).json({ message: "Error al verificar la cuenta de Google" });
+  }
+};
+
+// POST /registro/google  { googleId, email, nombre, apellido, fecha_nacimiento, celular }
+// Paso 2: crea la cuenta ya con celular y fecha de nacimiento. Queda activa
+// directo (Google ya verificó el email).
+export const registrarUsuarioGoogleController = async (req: Request, res: Response) => {
+  try {
+    const { googleId, email, nombre, apellido, fecha_nacimiento, celular } = req.body;
+
+    const resultado = await registrarUsuarioGoogleCasoDeUso({
+      googleId, email, nombre, apellido, fecha_nacimiento, celular
+    });
+
+    res.status(201).json({
+      mensaje: "Cuenta creada correctamente con Google. Ya podés iniciar sesión.",
+      usuario: {
+        id_usuario: resultado.usuario.id_usuario,
+        email: resultado.usuario.email,
+        estado_cuenta: resultado.usuario.estado_cuenta
+      }
+    });
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.message === "Ya existe una cuenta registrada con ese email") {
+      res.status(409).json({ message: error.message });
+      return;
+    }
+
+    if (
+      error.message === "Falta la información de Google" ||
+      error.message === "El nombre es obligatorio" ||
+      error.message === "El apellido es obligatorio" ||
+      error.message === "La fecha de nacimiento es obligatoria" ||
+      error.message === "El celular es obligatorio" ||
+      error.message === "La fecha de nacimiento no es válida" ||
+      error.message === "La fecha de nacimiento no puede ser una fecha futura" ||
+      error.message === "Tenés que ser mayor de 18 años para registrarte" ||
+      error.message === "La edad máxima para registrarte es 70 años" ||
+      error.message === "El celular debe tener el formato +54 seguido del código de área y número (solo dígitos, sin espacios ni guiones)"
+    ) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+
+    res.status(500).json({ message: "Error al crear la cuenta con Google" });
   }
 };

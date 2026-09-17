@@ -57,3 +57,12 @@ export const fechaNacimientoValida = (fechaNacimientoStr: string): ResultadoVali
 
   return { valida: true };
 };
+
+// NUEVO — Regla de negocio #2 del caso de uso CU-01 "Registrarse": la
+// contraseña debe tener una longitud mínima de 8 caracteres e incluir al
+// menos una letra mayúscula, una minúscula y un número.
+const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
+
+export const formatoPasswordValido = (password: string): boolean => {
+  return REGEX_PASSWORD.test(password);
+};

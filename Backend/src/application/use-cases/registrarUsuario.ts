@@ -9,7 +9,7 @@ import { hashPassword } from "../../infrastructure/security/password.util.js";
 import { generarTokenAleatorio, calcularExpiracion24h } from "../../infrastructure/security/token.util.js";
 // NUEVO (issue #21) — envío real del mail de verificación
 import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js";
-import { formatoCelularValido, fechaNacimientoValida } from "../../infrastructure/validation/registroValidaciones.util.js";
+import { formatoCelularValido, fechaNacimientoValida, formatoPasswordValido } from "../../infrastructure/validation/registroValidaciones.util.js";
 
 interface DatosRegistro {
   email: string;
@@ -27,8 +27,13 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
   if (!email || !email.trim()) {
     throw new Error("El email es obligatorio");
   }
-  if (!password || password.length < 6) {
-    throw new Error("La contraseña debe tener al menos 6 caracteres");
+  if (!password) {
+    throw new Error("La contraseña es obligatoria");
+  }
+  // Regla de negocio #2 (CU-01 Registrarse): mínimo 8 caracteres, con al
+  // menos una mayúscula, una minúscula y un número.
+  if (!formatoPasswordValido(password)) {
+    throw new Error("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
   }
   if (!nombre || !nombre.trim()) {
     throw new Error("El nombre es obligatorio");

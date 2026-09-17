@@ -11,6 +11,9 @@ curl -i -X POST http://localhost:3000/verificar-cuenta -H "Content-Type: applica
     registro
 curl -i -X POST http://localhost:3000/registro -H "Content-Type: application/json" -d '{"email":"tu-email-real@gmail.com","password":"123456","nombre":"Test","apellido":"Prueba","fecha_nacimiento":"2000-01-01","celular":"+543794000000"}'
 
+
+
+
 ================================================================
 1. BACKEND
 ================================================================

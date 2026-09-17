@@ -46,7 +46,7 @@ const fechaHaceAnios = (anios: number): string => {
 
 const datosValidos = {
   email: "cliente@example.com",
-  password: "123456",
+  password: "Abcdef12",
   nombre: "Ana",
   apellido: "Gómez",
   fecha_nacimiento: fechaHaceAnios(30),
@@ -62,10 +62,35 @@ describe("registrarUsuarioCasoDeUso", () => {
     ).rejects.toThrow("El email es obligatorio");
   });
 
-  test("lanza error si la password tiene menos de 6 caracteres", async () => {
+  test("lanza error si falta la password", async () => {
     await expect(
-      registrarUsuarioCasoDeUso({ ...datosValidos, password: "123" })
-    ).rejects.toThrow("La contraseña debe tener al menos 6 caracteres");
+      registrarUsuarioCasoDeUso({ ...datosValidos, password: "" })
+    ).rejects.toThrow("La contraseña es obligatoria");
+  });
+
+  // ── Formato de contraseña (mín. 8 caracteres, mayúscula, minúscula y número) ──
+  test("lanza error si la password tiene menos de 8 caracteres", async () => {
+    await expect(
+      registrarUsuarioCasoDeUso({ ...datosValidos, password: "Abc123" })
+    ).rejects.toThrow("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
+  });
+
+  test("lanza error si la password no tiene mayúscula", async () => {
+    await expect(
+      registrarUsuarioCasoDeUso({ ...datosValidos, password: "abcdefg1" })
+    ).rejects.toThrow("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
+  });
+
+  test("lanza error si la password no tiene minúscula", async () => {
+    await expect(
+      registrarUsuarioCasoDeUso({ ...datosValidos, password: "ABCDEFG1" })
+    ).rejects.toThrow("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
+  });
+
+  test("lanza error si la password no tiene número", async () => {
+    await expect(
+      registrarUsuarioCasoDeUso({ ...datosValidos, password: "Abcdefgh" })
+    ).rejects.toThrow("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
   });
 
   test("lanza error si falta el nombre", async () => {
