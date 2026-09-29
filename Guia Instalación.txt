@@ -17,7 +17,36 @@ TRUNCATE TABLE log_auditoria, tokens_verificacion, clientes, usuarios RESTART ID
 ---------------------------------------------------------
 para ingresar en index y demas 
 http://localhost:3000/index.html
-http://localhost:3000/pages/registro.htm
+
+http://localhost:3000/pages/registro.htm   ----> Registrar cuenta
+
+http://localhost:3000/pages/confirmar-cuenta.html    ---> para confirmar cuenta
+
+clinetes y usuarios relacionados sql 
+(-- Cada usuario con su cliente correspondiente (deberían coincidir los id)
+SELECT
+    u.id_usuario,
+    u.email,
+    u.estado_cuenta,
+    c.id_cliente,
+    c.nombre,
+    c.apellido
+FROM usuarios u
+JOIN clientes c ON c.id_cliente = u.id_usuario
+ORDER BY u.id_usuario;
+
+-- Usuarios que NO tienen fila en clientes (no debería haber ninguno,
+-- porque el registro crea ambas filas juntas)
+SELECT u.id_usuario, u.email, u.estado_cuenta
+FROM usuarios u
+LEFT JOIN clientes c ON c.id_cliente = u.id_usuario
+WHERE c.id_cliente IS NULL;)
+
+clientes sso_google
+(SELECT u.id_usuario, u.email, u.estado_cuenta, c.id_google_sso
+FROM usuarios u
+JOIN clientes c ON c.id_cliente = u.id_usuario
+WHERE c.id_google_sso IS NOT NULL;)
 
 
 ================================================================
