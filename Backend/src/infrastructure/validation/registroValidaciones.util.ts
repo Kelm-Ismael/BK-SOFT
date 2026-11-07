@@ -53,7 +53,7 @@ export const validarFechaNacimiento = (fechaNacimientoStr: string): ResultadoVal
   }
 
   if (edad > EDAD_MAXIMA) {
-    return { valida: false, motivo: "La edad máxima para registrarte es 70 años" };
+    return { valida: false, motivo: "La edad máxima para registrarte es 100 años" };
   }
 
   return { valida: true };

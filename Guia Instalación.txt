@@ -96,3 +96,9 @@ npm install -g live-server
 
 TRUNCATE TABLE aceptaciones_terminos, log_auditoria, tokens_verificacion, clientes, usuarios
 RESTART IDENTITY CASCADE;
+
+SELECT * FROM clientes;
+SELECT * FROM usuarios;
+SELECT * FROM tokens_verificacion;
+SELECT * FROM log_auditoria;
+SELECT * FROM aceptaciones_terminos;
