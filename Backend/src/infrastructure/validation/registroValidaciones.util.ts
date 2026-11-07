@@ -12,8 +12,8 @@ export const validarCelular = (celular: string): boolean => {
   return REGEX_CELULAR.test(celular.trim());
 };
 
+// Edad mínima para registrarse (excepción 4c del CU-01). No hay edad máxima.
 export const EDAD_MINIMA = 18;
-export const EDAD_MAXIMA = 70;
 
 const calcularEdad = (fechaNacimiento: Date): number => {
   const hoy = new Date();
@@ -50,10 +50,6 @@ export const validarFechaNacimiento = (fechaNacimientoStr: string): ResultadoVal
 
   if (edad < EDAD_MINIMA) {
     return { valida: false, motivo: "Tenés que ser mayor de 18 años para registrarte" };
-  }
-
-  if (edad > EDAD_MAXIMA) {
-    return { valida: false, motivo: "La edad máxima para registrarte es 100 años" };
   }
 
   return { valida: true };

@@ -43,7 +43,6 @@ export const registrarUsuarioController = async (req: Request, res: Response) =>
       error.message === "La fecha de nacimiento no es válida" ||
       error.message === "La fecha de nacimiento no puede ser una fecha futura" ||
       error.message === "Tenés que ser mayor de 18 años para registrarte" ||
-      error.message === "La edad máxima para registrarte es 70 años" ||
       error.message === "Tenés que aceptar los Términos y Condiciones y la Política de Privacidad"
     ) {
       res.status(400).json({ message: error.message });
@@ -200,7 +199,6 @@ export const registrarConGoogleController = async (req: Request, res: Response) 
       error.message === "La fecha de nacimiento no es válida" ||
       error.message === "La fecha de nacimiento no puede ser una fecha futura" ||
       error.message === "Tenés que ser mayor de 18 años para registrarte" ||
-      error.message === "La edad máxima para registrarte es 70 años" ||
       error.message === "El celular debe empezar con + y el código de país, seguido del número (entre 8 y 15 dígitos, sin espacios ni guiones)" ||
       error.message === "Tenés que aceptar los Términos y Condiciones y la Política de Privacidad"
     ) {
