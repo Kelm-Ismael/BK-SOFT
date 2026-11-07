@@ -13,7 +13,7 @@ export const validarCelular = (celular: string): boolean => {
 };
 
 export const EDAD_MINIMA = 18;
-export const EDAD_MAXIMA = 100;
+export const EDAD_MAXIMA = 70;
 
 const calcularEdad = (fechaNacimiento: Date): number => {
   const hoy = new Date();
