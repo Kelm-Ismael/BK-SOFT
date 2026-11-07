@@ -8,6 +8,7 @@ import { API_REGISTRO_GOOGLE } from "../core/config.js";
 const formulario = document.getElementById("formCompletarGoogle");
 const mensaje = document.getElementById("mensaje");
 const inputCelular = document.getElementById("celular");
+const checkTerminos = document.getElementById("aceptaTerminos");
 
 const perfilGuardado = sessionStorage.getItem("perfilGoogleRegistro");
 
@@ -38,6 +39,14 @@ formulario.addEventListener("submit", async (evento) => {
     const apellido = document.getElementById("apellido").value.trim();
     const fecha_nacimiento = document.getElementById("fecha_nacimiento").value;
     const celular = "+54" + inputCelular.value.trim();
+    const acepta_terminos = checkTerminos.checked;
+
+    // CU-01, RN9: sin aceptar Términos y Política no se crea la cuenta
+    if (!acepta_terminos) {
+        mensaje.textContent = "Tenés que aceptar los Términos y Condiciones y la Política de Privacidad.";
+        mensaje.classList.add("error");
+        return;
+    }
 
     const datos = {
         googleId: perfil.googleId,
@@ -45,7 +54,8 @@ formulario.addEventListener("submit", async (evento) => {
         nombre,
         apellido,
         fecha_nacimiento,
-        celular
+        celular,
+        acepta_terminos
     };
 
     const botonSubmit = formulario.querySelector("button[type=submit]");
@@ -61,19 +71,19 @@ formulario.addEventListener("submit", async (evento) => {
             return;
         }
 
+        // CU-01, FA1: la cuenta de Google queda activa directo. Se informa
+        // que fue activada y el caso de uso termina (no hay pantalla de login).
         sessionStorage.removeItem("perfilGoogleRegistro");
-        mensaje.textContent = cuerpo.mensaje || "Cuenta creada correctamente.";
+        mensaje.textContent = "Cuenta activada.";
         mensaje.classList.add("exito");
-
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 1500);
+        formulario.querySelectorAll("input, button").forEach((elemento) => (elemento.disabled = true));
 
     } catch (error) {
         console.error(error);
         mensaje.textContent = "No se pudo conectar con el servidor. Intentá de nuevo.";
         mensaje.classList.add("error");
     } finally {
-        botonSubmit.disabled = false;
+        // Si la cuenta ya quedó activada, el botón sigue deshabilitado
+        botonSubmit.disabled = mensaje.classList.contains("exito");
     }
 });

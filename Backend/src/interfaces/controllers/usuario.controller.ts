@@ -9,10 +9,10 @@ import { registrarUsuarioGoogleCasoDeUso } from "../../application/use-cases/reg
 // POST /registro
 export const registrarUsuarioController = async (req: Request, res: Response) => {
   try {
-    const { email, password, nombre, apellido, fecha_nacimiento, celular } = req.body;
+    const { email, password, nombre, apellido, fecha_nacimiento, celular, acepta_terminos } = req.body;
 
     const resultado = await registrarUsuarioCasoDeUso({
-      email, password, nombre, apellido, fecha_nacimiento, celular
+      email, password, nombre, apellido, fecha_nacimiento, celular, acepta_terminos
     });
 
     res.status(201).json({
@@ -38,7 +38,8 @@ export const registrarUsuarioController = async (req: Request, res: Response) =>
       error.message === "El nombre es obligatorio" ||
       error.message === "El apellido es obligatorio" ||
       error.message === "La fecha de nacimiento es obligatoria" ||
-      error.message === "El celular es obligatorio"
+      error.message === "El celular es obligatorio" ||
+      error.message === "Tenés que aceptar los Términos y Condiciones y la Política de Privacidad"
 
     ) {
       res.status(400).json({ message: error.message });
@@ -164,10 +165,10 @@ export const iniciarRegistroGoogleController = async (req: Request, res: Respons
 // directo (Google ya verificó el email).
 export const registrarUsuarioGoogleController = async (req: Request, res: Response) => {
   try {
-    const { googleId, email, nombre, apellido, fecha_nacimiento, celular } = req.body;
+    const { googleId, email, nombre, apellido, fecha_nacimiento, celular, acepta_terminos } = req.body;
 
     const resultado = await registrarUsuarioGoogleCasoDeUso({
-      googleId, email, nombre, apellido, fecha_nacimiento, celular
+      googleId, email, nombre, apellido, fecha_nacimiento, celular, acepta_terminos
     });
 
     res.status(201).json({
@@ -196,7 +197,8 @@ export const registrarUsuarioGoogleController = async (req: Request, res: Respon
       error.message === "La fecha de nacimiento no puede ser una fecha futura" ||
       error.message === "Tenés que ser mayor de 18 años para registrarte" ||
       error.message === "La edad máxima para registrarte es 70 años" ||
-      error.message === "El celular debe tener el formato +54 seguido del código de área y número (solo dígitos, sin espacios ni guiones)"
+      error.message === "El celular debe tener el formato +54 seguido del código de área y número (solo dígitos, sin espacios ni guiones)" ||
+      error.message === "Tenés que aceptar los Términos y Condiciones y la Política de Privacidad"
     ) {
       res.status(400).json({ message: error.message });
       return;

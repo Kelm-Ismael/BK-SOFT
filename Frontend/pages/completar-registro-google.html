@@ -80,7 +80,13 @@
                         </div>
                     </div>
 
-                    <p id="mensaje" class="mensaje"></p>
+                    <div class="check-terminos">
+                        <input type="checkbox" id="aceptaTerminos" name="aceptaTerminos" required>
+                        <label for="aceptaTerminos">Acepto los <a href="../assets/docs/terminos-y-condiciones.pdf" target="_blank" rel="noopener">Términos y Condiciones</a> y la <a href="../assets/docs/terminos-y-condiciones.pdf" target="_blank" rel="noopener">Política de Privacidad</a> *</label>
+                    </div>
+                    <p class="nota-obligatorios">(*) Los campos marcados con asterisco son obligatorios.</p>
+
+                    <p id="mensaje" class="mensaje" role="status" aria-live="polite"></p>
 
                     <div class="form-actions form-actions--una">
                         <button type="submit" class="btn-primary">Finalizar registro</button>

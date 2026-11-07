@@ -260,13 +260,16 @@ formulario.addEventListener("submit", async (evento) => {
             return;
         }
 
+        // CU-01, paso 10: el sistema activa la cuenta e informa que fue
+        // activada. El caso de uso termina acá (no hay pantalla de login).
         sessionStorage.removeItem("emailVerificacion");
-        mensaje.textContent = cuerpo.mensaje || "Cuenta verificada correctamente.";
+        mensaje.textContent = "Cuenta activada.";
         mensaje.classList.add("exito");
 
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 1500);
+        // Ya no queda nada por hacer en este formulario
+        clearInterval(intervaloCooldown);
+        textoCooldown.textContent = "";
+        formulario.querySelectorAll("input, button").forEach((elemento) => (elemento.disabled = true));
 
     } catch (error) {
         console.error(error);

@@ -10,6 +10,8 @@ import { generarTokenAleatorio, calcularExpiracion24h } from "../../infrastructu
 // NUEVO (issue #21) — envío real del mail de verificación
 import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js";
 import { formatoCelularValido, fechaNacimientoValida, formatoPasswordValido } from "../../infrastructure/validation/registroValidaciones.util.js";
+// CU-01, RN9 — constancia de aceptación de Términos y Política de Privacidad
+import { registrarAceptacionTerminos } from "../../infrastructure/repositories/aceptacionTerminos.repository.js";
 
 interface DatosRegistro {
   email: string;
@@ -18,10 +20,11 @@ interface DatosRegistro {
   apellido: string;
   fecha_nacimiento: string;
   celular: string;
+  acepta_terminos?: boolean;
 }
 
 export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
-  const { email, password, nombre, apellido, fecha_nacimiento, celular } = datos;
+  const { email, password, nombre, apellido, fecha_nacimiento, celular, acepta_terminos } = datos;
 
   // Validaciones simples
   if (!email || !email.trim()) {
@@ -55,6 +58,11 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
     throw new Error("El celular debe tener el formato +54 seguido del código de área y número (solo dígitos, sin espacios ni guiones)");
   }
 
+  // CU-01, RN9: la casilla de Términos y Política es obligatoria
+  if (acepta_terminos !== true) {
+    throw new Error("Tenés que aceptar los Términos y Condiciones y la Política de Privacidad");
+  }
+
   const usuarioExistente = await buscarUsuarioPorEmail(email);
   if (usuarioExistente) {
     throw new Error("Ya existe una cuenta registrada con ese email");
@@ -78,6 +86,8 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
   if (!cliente) {
     throw new Error("No se pudo crear el perfil de cliente");
   }
+
+  await registrarAceptacionTerminos(usuario.id_usuario);
 
   const tokenValidacion = generarTokenAleatorio();
   const tokenExpira = calcularExpiracion24h();
