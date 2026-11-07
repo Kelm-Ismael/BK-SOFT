@@ -29,19 +29,16 @@ export const buscarUsuarioPorEmail = async (email: string) => {
   return result.rows[0];
 };
 
-// Actualiza el estado de la cuenta (pendiente -> activo, al verificar el token)
-export const actualizarEstadoCuenta = async (
-  id_usuario: number,
-  estadoCuenta: string
-) => {
+// Activa la cuenta (pendiente -> activo) cuando el código de verificación es correcto
+export const activarUsuario = async (id_usuario: number) => {
   const result = await pool.query<Usuario>(
     `
     UPDATE usuarios
-    SET estado_cuenta = $1
-    WHERE id_usuario = $2
+    SET estado_cuenta = 'activo'
+    WHERE id_usuario = $1
     RETURNING *
     `,
-    [estadoCuenta, id_usuario]
+    [id_usuario]
   );
 
   return result.rows[0];

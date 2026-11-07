@@ -1,4 +1,3 @@
-
 // src/app.ts
 import path from "node:path";
 import express, { type Application } from 'express';

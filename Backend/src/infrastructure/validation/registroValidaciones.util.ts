@@ -8,12 +8,12 @@
 // Ej. "+543794000000" (Argentina), "+59899123456" (Uruguay), "+14155550123" (EE. UU.).
 const REGEX_CELULAR = /^\+[1-9]\d{7,14}$/;
 
-export const formatoCelularValido = (celular: string): boolean => {
+export const validarCelular = (celular: string): boolean => {
   return REGEX_CELULAR.test(celular.trim());
 };
 
 export const EDAD_MINIMA = 18;
-export const EDAD_MAXIMA = 70;
+export const EDAD_MAXIMA = 100;
 
 const calcularEdad = (fechaNacimiento: Date): number => {
   const hoy = new Date();
@@ -35,7 +35,7 @@ interface ResultadoValidacionFecha {
   motivo?: string;
 }
 
-export const fechaNacimientoValida = (fechaNacimientoStr: string): ResultadoValidacionFecha => {
+export const validarFechaNacimiento = (fechaNacimientoStr: string): ResultadoValidacionFecha => {
   const fecha = new Date(fechaNacimientoStr);
 
   if (Number.isNaN(fecha.getTime())) {
@@ -64,6 +64,6 @@ export const fechaNacimientoValida = (fechaNacimientoStr: string): ResultadoVali
 // menos una letra mayúscula, una minúscula y un número.
 const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
-export const formatoPasswordValido = (password: string): boolean => {
+export const validarPassword = (password: string): boolean => {
   return REGEX_PASSWORD.test(password);
 };

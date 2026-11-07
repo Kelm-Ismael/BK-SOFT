@@ -59,7 +59,7 @@ formulario.addEventListener("submit", async (e) => {
 
         // Se guarda el email para que la pantalla de confirmación sepa a quién verificar
         sessionStorage.setItem("emailVerificacion", email);
-        window.location.href = "confirmar-cuenta.html";
+        window.location.href = "activar-cuenta.html";
 
     } catch (error) {
         console.error(error);

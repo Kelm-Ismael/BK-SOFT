@@ -1,11 +1,15 @@
-// Archivo NUEVO — lógica de la pantalla "Confirmá tu cuenta" (confirmar-cuenta.html)
+// Archivo — lógica de la pantalla "Confirmá tu cuenta" (activar-cuenta.html)
 import { postDatos } from "../core/api.js";
 import { API_VERIFICAR_CUENTA, API_REENVIAR_CODIGO } from "../core/config.js";
 
 const COOLDOWN_INICIAL_SEGUNDOS = 60;
 
-const email = sessionStorage.getItem("emailVerificacion");
-const emailMostrado = document.getElementById("emailMostrado");
+// Si venís recién de registrarte, el email ya quedó guardado acá.
+// Si entrás directo por el link "Activar cuenta", esto va a ser null
+// y el campo de email queda vacío para que lo tipees vos.
+const emailGuardado = sessionStorage.getItem("emailVerificacion");
+
+const inputEmail = document.getElementById("email");
 const casilleros = Array.from(document.querySelectorAll(".casillero"));
 const formulario = document.getElementById("formConfirmar");
 const mensaje = document.getElementById("mensaje");
@@ -14,13 +18,12 @@ const textoCooldown = document.getElementById("cooldown");
 
 let intervaloCooldown = null;
 
-// Si alguien entra directo a esta pantalla sin haberse registrado antes en esta sesión
-if (!email) {
-    window.location.href = "registro.html";
+if (emailGuardado) {
+    inputEmail.value = emailGuardado;
 }
 
-if (emailMostrado) {
-    emailMostrado.textContent = email;
+function obtenerEmail() {
+    return inputEmail.value.trim();
 }
 
 // ── Casilleros de 6 dígitos: avanzar/retroceder foco automáticamente ──
@@ -83,6 +86,7 @@ formulario.addEventListener("submit", async (evento) => {
     mensaje.textContent = "";
     mensaje.className = "mensaje";
 
+    const email = obtenerEmail();
     const codigo = obtenerCodigo();
 
     if (codigo.length !== 6) {
@@ -101,13 +105,22 @@ formulario.addEventListener("submit", async (evento) => {
             return;
         }
 
+        // CU-01, paso 10: el sistema activa la cuenta e informa que fue
+        // activada. El caso de uso termina acá (no hay pantalla de login),
+        // así que vuelve al inicio.
         sessionStorage.removeItem("emailVerificacion");
-        mensaje.textContent = cuerpo.mensaje || "Cuenta verificada correctamente.";
+        mensaje.textContent = "Cuenta activada.";
         mensaje.classList.add("exito");
 
+        // Ya no queda nada por hacer en este formulario
+        clearInterval(intervaloCooldown);
+        textoCooldown.textContent = "";
+        formulario.querySelectorAll("input, button").forEach((elemento) => (elemento.disabled = true));
+
+        // Después de mostrar el mensaje, vuelve a la página de inicio
         setTimeout(() => {
-            window.location.href = "login.html";
-        }, 1500);
+            window.location.href = "../index.html";
+        }, 2000);
 
     } catch (error) {
         console.error(error);
@@ -119,6 +132,15 @@ formulario.addEventListener("submit", async (evento) => {
 botonReenviar.addEventListener("click", async () => {
     mensaje.textContent = "";
     mensaje.className = "mensaje";
+
+    const email = obtenerEmail();
+
+    if (!email) {
+        mensaje.textContent = "Ingresá tu email para poder reenviarte el código.";
+        mensaje.classList.add("error");
+        inputEmail.focus();
+        return;
+    }
 
     try {
         const respuesta = await postDatos(API_REENVIAR_CODIGO, { email });
@@ -148,6 +170,10 @@ botonReenviar.addEventListener("click", async () => {
     }
 });
 
-// Al entrar a esta pantalla ya se mandó un código desde el registro,
-// así que el cooldown de "Reenviar" arranca corriendo también acá.
-iniciarCooldown(COOLDOWN_INICIAL_SEGUNDOS);
+// El cooldown solo arranca corriendo si venís recién de registrarte (ya se
+// mandó un código automáticamente). Si entraste por "Activar cuenta" sin
+// haber pasado por el registro recién, el botón "Reenviar" queda disponible
+// de entrada para que puedas pedir el primer envío de esta sesión.
+if (emailGuardado) {
+    iniciarCooldown(COOLDOWN_INICIAL_SEGUNDOS);
+}

@@ -2,14 +2,14 @@
 // Orquesta el Escenario 2 completo por canal EMAIL (WhatsApp y Google SSO
 // quedan fuera de este sprint: no están entre los issues #19-22).
 import { crearUsuario, buscarUsuarioPorEmail } from "../../infrastructure/repositories/usuario.repository.js";
-import { crearClienteDesdeRegistro } from "../../infrastructure/repositories/cliente.repository.js";
+import { crearCliente } from "../../infrastructure/repositories/cliente.repository.js";
 import { crearToken } from "../../infrastructure/repositories/tokenVerificacion.repository.js";
-import { registrarEvento } from "../../infrastructure/repositories/logAuditoria.repository.js";
-import { hashPassword } from "../../infrastructure/security/password.util.js";
-import { generarTokenAleatorio, calcularExpiracion24h } from "../../infrastructure/security/token.util.js";
+import { registrarEventoAuditoria } from "../../infrastructure/repositories/logAuditoria.repository.js";
+import { encriptarPassword } from "../../infrastructure/security/password.util.js";
+import { generarCodigoVerificacion, calcularVencimientoToken } from "../../infrastructure/security/token.util.js";
 // NUEVO (issue #21) — envío real del mail de verificación
 import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js";
-import { formatoCelularValido, fechaNacimientoValida, formatoPasswordValido } from "../../infrastructure/validation/registroValidaciones.util.js";
+import { validarCelular, validarFechaNacimiento, validarPassword } from "../../infrastructure/validation/registroValidaciones.util.js";
 // CU-01, RN9 — constancia de aceptación de Términos y Política de Privacidad
 import { registrarAceptacionTerminos } from "../../infrastructure/repositories/aceptacionTerminos.repository.js";
 
@@ -35,7 +35,7 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
   }
   // Regla de negocio #2 (CU-01 Registrarse): mínimo 8 caracteres, con al
   // menos una mayúscula, una minúscula y un número.
-  if (!formatoPasswordValido(password)) {
+  if (!validarPassword(password)) {
     throw new Error("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
   }
   if (!nombre || !nombre.trim()) {
@@ -47,14 +47,14 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
   if (!fecha_nacimiento || !fecha_nacimiento.trim()) {
     throw new Error("La fecha de nacimiento es obligatoria");
   }
-  const validacionFecha = fechaNacimientoValida(fecha_nacimiento);
+  const validacionFecha = validarFechaNacimiento(fecha_nacimiento);
   if (!validacionFecha.valida) {
     throw new Error(validacionFecha.motivo);
   }
   if (!celular || !celular.trim()) {
     throw new Error("El celular es obligatorio");
   }
-   if (!formatoCelularValido(celular)) {
+   if (!validarCelular(celular)) {
     throw new Error("El celular debe empezar con + y el código de país, seguido del número (entre 8 y 15 dígitos, sin espacios ni guiones)");
   }
 
@@ -68,7 +68,7 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
     throw new Error("Ya existe una cuenta registrada con ese email");
   }
 
-  const passwordHash = await hashPassword(password);
+  const passwordHash = await encriptarPassword(password);
 
   // Canal email: la cuenta nace "pendiente" hasta que se verifique el token
   const usuario = await crearUsuario(email, passwordHash, "pendiente");
@@ -76,7 +76,7 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
     throw new Error("No se pudo crear el usuario");
   }
 
-  const cliente = await crearClienteDesdeRegistro(
+  const cliente = await crearCliente(
     usuario.id_usuario,
     nombre,
     apellido,
@@ -89,14 +89,14 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
 
   await registrarAceptacionTerminos(usuario.id_usuario);
 
-  const tokenValidacion = generarTokenAleatorio();
-  const tokenExpira = calcularExpiracion24h();
+  const tokenValidacion = generarCodigoVerificacion();
+  const tokenExpira = calcularVencimientoToken();
   const token = await crearToken(usuario.id_usuario, tokenValidacion, tokenExpira);
 
   // issue #21: envío real del email con el link de verificación
   await enviarCorreoVerificacion(email, tokenValidacion);
 
-  await registrarEvento(cliente.id_cliente, "registro_usuario");
+  await registrarEventoAuditoria(cliente.id_cliente, "registro_usuario");
 
   return { usuario, cliente, token };
 };

@@ -25,7 +25,7 @@ interface TokenInfoGoogle {
   error_description?: string;
 }
 
-export const verificarIdTokenGoogle = async (idToken: string): Promise<PerfilGoogle> => {
+export const verificarTokenGoogle = async (idToken: string): Promise<PerfilGoogle> => {
   if (!idToken || typeof idToken !== "string") {
     throw new Error("Falta el token de Google");
   }

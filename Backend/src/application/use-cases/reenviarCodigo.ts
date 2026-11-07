@@ -2,11 +2,11 @@
 // "Confirmá tu cuenta": pide un código nuevo cuando el anterior venció o no llegó.
 import {
   buscarUltimoTokenPorUsuario,
-  marcarTokenExpirado,
+  invalidarToken,
   crearToken
 } from "../../infrastructure/repositories/tokenVerificacion.repository.js";
 import { buscarUsuarioPorEmail } from "../../infrastructure/repositories/usuario.repository.js";
-import { generarTokenAleatorio, calcularExpiracion24h } from "../../infrastructure/security/token.util.js";
+import { generarCodigoVerificacion, calcularVencimientoToken } from "../../infrastructure/security/token.util.js";
 import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js";
 
 // Tiempo mínimo entre reenvíos (coincide con el "Disponible en 59 seg" del mockup)
@@ -35,12 +35,12 @@ export const reenviarCodigoCasoDeUso = async (email: string): Promise<void> => {
 
     // Invalida el código anterior si todavía estaba activo (que no queden dos códigos válidos a la vez)
     if (ultimoToken.estado_token === "activo") {
-      await marcarTokenExpirado(ultimoToken.id_token);
+      await invalidarToken(ultimoToken.id_token);
     }
   }
 
-  const nuevoCodigo = generarTokenAleatorio();
-  const nuevaExpiracion = calcularExpiracion24h();
+  const nuevoCodigo = generarCodigoVerificacion();
+  const nuevaExpiracion = calcularVencimientoToken();
   await crearToken(usuario.id_usuario, nuevoCodigo, nuevaExpiracion);
 
   await enviarCorreoVerificacion(usuario.email, nuevoCodigo);

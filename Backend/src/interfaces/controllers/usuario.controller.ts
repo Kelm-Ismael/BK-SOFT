@@ -1,10 +1,10 @@
 // Archivo NUEVO — issue #20
 import { Request, Response } from "express";
 import { registrarUsuarioCasoDeUso } from "../../application/use-cases/registrarUsuario.js";
-import { validarTokenCasoDeUso } from "../../application/use-cases/validarToken.js";
+import { activarCuentaCasoDeUso } from "../../application/use-cases/activarCuenta.js";
 import { reenviarCodigoCasoDeUso } from "../../application/use-cases/reenviarCodigo.js";
-import { iniciarRegistroGoogleCasoDeUso } from "../../application/use-cases/iniciarRegistroGoogle.js";
-import { registrarUsuarioGoogleCasoDeUso } from "../../application/use-cases/registrarUsuarioGoogle.js";
+import { verificarCuentaGoogleCasoDeUso } from "../../application/use-cases/verificarCuentaGoogle.js";
+import { registrarConGoogleCasoDeUso } from "../../application/use-cases/registrarConGoogle.js";
 
 // POST /registro
 export const registrarUsuarioController = async (req: Request, res: Response) => {
@@ -55,7 +55,7 @@ export const registrarUsuarioController = async (req: Request, res: Response) =>
 };
 
 // POST /verificar-cuenta  { email, codigo }
-export const verificarCuentaController = async (req: Request, res: Response) => {
+export const activarCuentaController = async (req: Request, res: Response) => {
   try {
     const { email, codigo } = req.body;
 
@@ -68,7 +68,7 @@ export const verificarCuentaController = async (req: Request, res: Response) => 
       return;
     }
 
-    const usuario = await validarTokenCasoDeUso(email, codigo);
+    const usuario = await activarCuentaCasoDeUso(email, codigo);
 
     res.status(200).json({
       mensaje: "Cuenta verificada correctamente. Ya podés iniciar sesión.",
@@ -135,11 +135,11 @@ export const reenviarCodigoController = async (req: Request, res: Response) => {
 // Paso 1 del registro con Google: verifica el token y avisa si la cuenta
 // ya existe. Si es cuenta nueva, devuelve el perfil de Google (email,
 // nombre, apellido, googleId) para que el frontend complete lo que falta.
-export const iniciarRegistroGoogleController = async (req: Request, res: Response) => {
+export const verificarCuentaGoogleController = async (req: Request, res: Response) => {
   try {
     const { idToken } = req.body;
 
-    const perfil = await iniciarRegistroGoogleCasoDeUso(idToken);
+    const perfil = await verificarCuentaGoogleCasoDeUso(idToken);
 
     res.status(200).json({ perfil });
   } catch (error: any) {
@@ -167,11 +167,11 @@ export const iniciarRegistroGoogleController = async (req: Request, res: Respons
 // POST /registro/google  { googleId, email, nombre, apellido, fecha_nacimiento, celular }
 // Paso 2: crea la cuenta ya con celular y fecha de nacimiento. Queda activa
 // directo (Google ya verificó el email).
-export const registrarUsuarioGoogleController = async (req: Request, res: Response) => {
+export const registrarConGoogleController = async (req: Request, res: Response) => {
   try {
     const { googleId, email, nombre, apellido, fecha_nacimiento, celular, acepta_terminos } = req.body;
 
-    const resultado = await registrarUsuarioGoogleCasoDeUso({
+    const resultado = await registrarConGoogleCasoDeUso({
       googleId, email, nombre, apellido, fecha_nacimiento, celular, acepta_terminos
     });
 

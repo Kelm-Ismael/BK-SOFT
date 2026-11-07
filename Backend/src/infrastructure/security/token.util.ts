@@ -5,12 +5,12 @@ import { randomInt } from "crypto";
 
 // Genera un código de 6 dígitos (000000-999999), con ceros a la izquierda
 // si hace falta. Sigue entrando en tokens_verificacion.token_validacion VARCHAR(64).
-export const generarTokenAleatorio = (): string => {
+export const generarCodigoVerificacion = (): string => {
   return randomInt(0, 1_000_000).toString().padStart(6, "0");
 };
 
 // Fecha de expiración: 24 horas desde ahora (Escenario 3)
-export const calcularExpiracion24h = (): Date => {
+export const calcularVencimientoToken = (): Date => {
   const ahora = new Date();
   return new Date(ahora.getTime() + 24 * 60 * 60 * 1000);
 };

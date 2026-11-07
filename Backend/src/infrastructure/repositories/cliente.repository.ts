@@ -10,7 +10,7 @@ import { Cliente } from "../../domain/entities/cliente.entity.js";
 // otro esquema (nombre/telefono/email) que ya no coincide con la
 // tabla actual. A propósito no se migró acá todavía — se decide
 // cuando toque ese escenario.
-export const crearClienteDesdeRegistro = async (
+export const crearCliente = async (
   id_usuario: number,
   nombre: string,
   apellido: string,
@@ -30,10 +30,10 @@ export const crearClienteDesdeRegistro = async (
 };
 
 // NUEVO — registro por canal Google SSO (Escenario 2, variante Google).
-// Igual que crearClienteDesdeRegistro pero además guarda el id_google_sso
+// Igual que crearCliente pero además guarda el id_google_sso
 // (el "sub" del token de Google), que es lo que identifica a la cuenta de
 // Google de forma única y estable.
-export const crearClienteDesdeRegistroGoogle = async (
+export const crearClienteGoogle = async (
   id_usuario: number,
   nombre: string,
   apellido: string,

@@ -20,17 +20,6 @@ export const crearToken = async (
   return result.rows[0];
 };
 
-// Busca un token por su valor (ya no se usa en el flujo actual, se deja por si sirve)
-export const buscarTokenPorValor = async (tokenValidacion: string) => {
-
-  const result = await pool.query(
-    `SELECT * FROM tokens_verificacion WHERE token_validacion = $1`,
-    [tokenValidacion]
-  );
-
-  return result.rows[0];
-};
-
 // Busca el token activo más reciente de un usuario
 export const buscarTokenActivoPorUsuario = async (usuario_id: number) => {
 
@@ -64,7 +53,7 @@ export const buscarUltimoTokenPorUsuario = async (usuario_id: number) => {
 };
 
 // Incrementa el contador de intentos fallidos de un token puntual
-export const incrementarIntentosFallidos = async (id_token: number) => {
+export const registrarIntentoFallido = async (id_token: number) => {
 
   const result = await pool.query(
     `
@@ -96,7 +85,7 @@ export const marcarTokenUtilizado = async (id_token: number) => {
 };
 
 // Marca un token como expirado (pasaron las 24h sin que se use, o se pasó de intentos)
-export const marcarTokenExpirado = async (id_token: number) => {
+export const invalidarToken = async (id_token: number) => {
 
   const result = await pool.query(
     `
