@@ -41,3 +41,4 @@ uploads/
 # Certificados / claves locales (por si en algún sprint usás JWT con .pem)
 *.pem
 *.key
+.env
