@@ -11,4 +11,4 @@ export const API_REGISTRO_GOOGLE = "http://localhost:3000/registro/google";
 // Client ID de OAuth 2.0 (Google Cloud Console > APIs & Services >
 // Credentials). Tiene que ser el MISMO valor que GOOGLE_CLIENT_ID en
 // Backend/.env.
-export const GOOGLE_CLIENT_ID = "596833095283-71h4q6ua9to2otsi7lv73bgv6arseq8g.apps.googleusercontent.com";
+export const GOOGLE_CLIENT_ID = "562581695923-mhrne6rbf3bkja43rks7a61qv5jp7985.apps.googleusercontent.com";

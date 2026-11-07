@@ -1,0 +1,29 @@
+1. EMAIL_USER y EMAIL_PASS (Gmail)
+
+Iniciá sesión con la cuenta de Gmail nueva.
+Entrá a myaccount.google.com → Seguridad y activá la Verificación en 2 pasos.
+Entrá a myaccount.google.com/apppasswords.
+Escribí un nombre, por ejemplo “BK SOFT”, y tocá Crear.
+Copiá la clave de 16 letras que aparece (solo se muestra una vez).
+En Backend/.env poné:
+   EMAIL_USER=tucorreonuevo@gmail.com
+   EMAIL_PASS=laclavede16letras
+
+Escribí la clave sin espacios. No va tu contraseña normal de Gmail.
+
+2. GOOGLE_CLIENT_ID
+
+Entrá a console.cloud.google.com con esa cuenta.
+Arriba, creá un proyecto nuevo, por ejemplo “BK SOFT”.
+Andá a APIs y servicios → Pantalla de consentimiento de OAuth, completá nombre de la app y correo, y elegí tipo Externo.
+Andá a Credenciales → Crear credenciales → ID de cliente de OAuth.
+En tipo, elegí Aplicación web.
+En Orígenes de JavaScript autorizados, agregá http://localhost:3000 y, si lo usás, también la URL de Vercel.
+Tocá Crear y copiá el ID de cliente.
+Pegalo en dos lugares:
+en Backend/.env: GOOGLE_CLIENT_ID=elid
+en Frontend/js/core/config.js: export const GOOGLE_CLIENT_ID = "elid";
+
+3. Reiniciá el backend para que tome los cambios.
+
+El Client ID no depende del correo que envía los mensajes. Si solo querés cambiar el remitente, alcanza con el paso 1.

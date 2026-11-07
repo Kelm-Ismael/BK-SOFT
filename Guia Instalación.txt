@@ -94,3 +94,5 @@ cd ../front
 # (alternativa: extensión "Live Server" de VS Code, hace lo mismo sin instalar nada global)
 npm install -g live-server
 
+TRUNCATE TABLE aceptaciones_terminos, log_auditoria, tokens_verificacion, clientes, usuarios
+RESTART IDENTITY CASCADE;
