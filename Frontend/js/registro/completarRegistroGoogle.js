@@ -23,8 +23,11 @@ if (!perfilGuardado) {
     document.getElementById("email").value = perfil.email || "";
 }
 
+// Celular en formato internacional: un "+" al inicio y después solo dígitos
+// (cualquier país). Se quitan espacios, guiones y letras mientras se escribe.
 inputCelular.addEventListener("input", () => {
-    inputCelular.value = inputCelular.value.replace(/\D/g, "");
+    const soloDigitos = inputCelular.value.replace(/\D/g, "");
+    inputCelular.value = "+" + soloDigitos;
 });
 
 formulario.addEventListener("submit", async (evento) => {
@@ -38,7 +41,7 @@ formulario.addEventListener("submit", async (evento) => {
     const nombre = document.getElementById("nombre").value.trim();
     const apellido = document.getElementById("apellido").value.trim();
     const fecha_nacimiento = document.getElementById("fecha_nacimiento").value;
-    const celular = "+54" + inputCelular.value.trim();
+    const celular = inputCelular.value.trim();
     const acepta_terminos = checkTerminos.checked;
 
     // CU-01, RN9: sin aceptar Términos y Política no se crea la cuenta
@@ -72,11 +75,17 @@ formulario.addEventListener("submit", async (evento) => {
         }
 
         // CU-01, FA1: la cuenta de Google queda activa directo. Se informa
-        // que fue activada y el caso de uso termina (no hay pantalla de login).
+        // que fue activada y el caso de uso termina (no hay pantalla de login),
+        // así que vuelve al inicio.
         sessionStorage.removeItem("perfilGoogleRegistro");
         mensaje.textContent = "Cuenta activada.";
         mensaje.classList.add("exito");
         formulario.querySelectorAll("input, button").forEach((elemento) => (elemento.disabled = true));
+
+        // Después de mostrar el mensaje, vuelve a la página de inicio
+        setTimeout(() => {
+            window.location.href = "../index.html";
+        }, 2000);
 
     } catch (error) {
         console.error(error);

@@ -2,10 +2,11 @@
 // Antes solo se chequeaba que celular y fecha_nacimiento no vinieran vacíos;
 // ahora también se valida que tengan un formato/valor razonable.
 
-// Prefijo internacional de Argentina ("+54") + código de área + número,
-// todo junto y solo dígitos después del "+54" (sin espacios ni guiones).
-// Ej. "+543794000000" (+54, área 379, número 4000000).
-const REGEX_CELULAR = /^\+54\d{8,15}$/;
+// Formato internacional (cualquier país): "+" + código de país + número,
+// todo junto, solo dígitos y entre 8 y 15 dígitos en total (estándar E.164).
+// El primer dígito no puede ser 0 (ningún código de país empieza con 0).
+// Ej. "+543794000000" (Argentina), "+59899123456" (Uruguay), "+14155550123" (EE. UU.).
+const REGEX_CELULAR = /^\+[1-9]\d{7,14}$/;
 
 export const formatoCelularValido = (celular: string): boolean => {
   return REGEX_CELULAR.test(celular.trim());

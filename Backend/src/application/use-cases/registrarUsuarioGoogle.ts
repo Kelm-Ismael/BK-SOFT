@@ -44,7 +44,7 @@ export const registrarUsuarioGoogleCasoDeUso = async (datos: DatosRegistroGoogle
     throw new Error("El celular es obligatorio");
   }
   if (!formatoCelularValido(celular)) {
-    throw new Error("El celular debe tener el formato +54 seguido del código de área y número (solo dígitos, sin espacios ni guiones)");
+    throw new Error("El celular debe empezar con + y el código de país, seguido del número (entre 8 y 15 dígitos, sin espacios ni guiones)");
   }
 
   // CU-01, RN9: la casilla de Términos y Política es obligatoria
