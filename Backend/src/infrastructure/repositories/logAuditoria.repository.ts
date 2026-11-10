@@ -1,7 +1,7 @@
 import { pool } from "../../config/db.js";
 import { LogAuditoria } from "../../domain/entities/logAuditoria.entity.js";
 
-// cliente_id == id_usuario, porque clientes es tabla-per-type de usuarios.
+// cliente_id == id_usuario
 export const registrarEventoAuditoria = async (
   cliente_id: number,
   evento: string

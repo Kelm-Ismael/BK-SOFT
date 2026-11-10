@@ -1,6 +1,5 @@
-// Archivo NUEVO — issue #20 (Escenario 3: Autenticar cuenta)
-// Actualizado: código de 6 dígitos + email (antes: token largo por link),
-// con límite de intentos fallidos por cuenta.
+// Activar cuenta de usuario con código de verificación
+
 import {
   buscarTokenActivoPorUsuario,
   marcarTokenUtilizado,

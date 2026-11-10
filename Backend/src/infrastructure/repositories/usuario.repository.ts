@@ -1,7 +1,7 @@
 import { pool } from "../../config/db.js";
 import { Usuario } from "../../domain/entities/usuario.entity.js";
 
-// Función async para crear un usuario (Escenario 2: Registrarse)
+// Función  para crear un usuario
 export const crearUsuario = async (
   email: string,
   passwordHash: string | null,
@@ -19,7 +19,7 @@ export const crearUsuario = async (
   return result.rows[0];
 };
 
-// Busca un usuario por email (para validar que no esté repetido, y para el login más adelante)
+// Busca un usuario por email (Que NO est repetido)
 export const buscarUsuarioPorEmail = async (email: string) => {
   const result = await pool.query<Usuario>(
     `SELECT * FROM usuarios WHERE email = $1`,

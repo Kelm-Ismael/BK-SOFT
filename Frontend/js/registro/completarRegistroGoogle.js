@@ -1,7 +1,4 @@
-// Archivo NUEVO — paso 2 del registro con Google: pide celular y fecha de
-// nacimiento (Google no los provee, y `clientes` los exige) y termina de
-// crear la cuenta. Llega acá después de completar-registro-google.html
-// haber guardado el perfil verificado en sessionStorage (ver googleAuth.js).
+// Registro con Google: completar datos faltantes
 import { postDatos } from "../core/api.js";
 import { API_REGISTRO_GOOGLE } from "../core/config.js";
 
@@ -13,8 +10,7 @@ const checkTerminos = document.getElementById("aceptaTerminos");
 const perfilGuardado = sessionStorage.getItem("perfilGoogleRegistro");
 
 if (!perfilGuardado) {
-    // Llegaron directo a esta pantalla sin pasar por Google: no hay nada
-    // guardado para completar.
+
     window.location.href = "registro.html";
 } else {
     const perfil = JSON.parse(perfilGuardado);
@@ -23,8 +19,7 @@ if (!perfilGuardado) {
     document.getElementById("email").value = perfil.email || "";
 }
 
-// Celular en formato internacional: un "+" al inicio y después solo dígitos
-// (cualquier país). Se quitan espacios, guiones y letras mientras se escribe.
+
 inputCelular.addEventListener("input", () => {
     const soloDigitos = inputCelular.value.replace(/\D/g, "");
     inputCelular.value = "+" + soloDigitos;
@@ -44,7 +39,6 @@ formulario.addEventListener("submit", async (evento) => {
     const celular = inputCelular.value.trim();
     const acepta_terminos = checkTerminos.checked;
 
-    // CU-01, RN9: sin aceptar Términos y Política no se crea la cuenta
     if (!acepta_terminos) {
         mensaje.textContent = "Tenés que aceptar los Términos y Condiciones y la Política de Privacidad.";
         mensaje.classList.add("error");
@@ -74,15 +68,13 @@ formulario.addEventListener("submit", async (evento) => {
             return;
         }
 
-        // CU-01, FA1: la cuenta de Google queda activa directo. Se informa
-        // que fue activada y el caso de uso termina (no hay pantalla de login),
-        // así que vuelve al inicio.
+        // CUENTA ACTIVADA
         sessionStorage.removeItem("perfilGoogleRegistro");
         mensaje.textContent = "Cuenta activada.";
         mensaje.classList.add("exito");
         formulario.querySelectorAll("input, button").forEach((elemento) => (elemento.disabled = true));
 
-        // Después de mostrar el mensaje, vuelve a la página de inicio
+        // Redirige a la página de inicio
         setTimeout(() => {
             window.location.href = "../index.html";
         }, 2000);

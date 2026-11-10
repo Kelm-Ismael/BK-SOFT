@@ -1,4 +1,4 @@
-// Archivo NUEVO — lógica de la pantalla "Crear cuenta" (registro.html)
+// Crear cuenta con email y contraseña
 import { postDatos } from "../core/api.js";
 import { API_REGISTRO } from "../core/config.js";
 
@@ -15,8 +15,6 @@ togglePassword.addEventListener("click", () => {
     togglePassword.textContent = esPassword ? "🙈" : "👁️";
 });
 
-// Celular en formato internacional: un "+" al inicio y después solo dígitos
-// (cualquier país). Se quitan espacios, guiones y letras mientras se escribe.
 inputCelular.addEventListener("input", () => {
     const soloDigitos = inputCelular.value.replace(/\D/g, "");
     inputCelular.value = "+" + soloDigitos;

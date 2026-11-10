@@ -1,4 +1,4 @@
-// Archivo NUEVO — issue #20
+// Rutas
 import { Router } from "express";
 import {
   registrarUsuarioController,

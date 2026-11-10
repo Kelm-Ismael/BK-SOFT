@@ -1,10 +1,5 @@
-// Archivo NUEVO — Escenario 2 (Registrarse) por canal Google SSO, paso 1.
-//
-// Alcance acordado: esto SOLO cubre cuentas NUEVAS. Si ya existe una cuenta
-// con ese email o ese Google ID, se informa al frontend en vez de dejar
-// entrar — dejar entrar sin password es, en los hechos, el caso de uso
-// "Iniciar sesión", que todavía no se implementa (sigue con el redirect
-// placeholder). No mezclar los dos.
+// Registrarse con google sso
+
 import { buscarUsuarioPorEmail } from "../../infrastructure/repositories/usuario.repository.js";
 import { buscarClientePorGoogleId } from "../../infrastructure/repositories/cliente.repository.js";
 import { verificarTokenGoogle, type PerfilGoogle } from "../../infrastructure/security/googleToken.util.js";
@@ -24,10 +19,5 @@ export const verificarCuentaGoogleCasoDeUso = async (idToken: string): Promise<P
     throw new Error(MENSAJE_CUENTA_EXISTENTE);
   }
 
-  // Todavía no se crea nada en la base: faltan celular y fecha de
-  // nacimiento, que `clientes` exige (NOT NULL) y Google no provee. El
-  // frontend pide esos datos en una pantalla intermedia
-  // (completar-registro-google.html) y ahí recién se llama a
-  // registrarConGoogleCasoDeUso con todo junto.
   return perfil;
 };

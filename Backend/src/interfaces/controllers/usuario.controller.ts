@@ -1,4 +1,4 @@
-// Archivo NUEVO — issue #20
+// Controladores de la capa de presentación (Express) para el registro y verificación de usuarios.
 import { Request, Response } from "express";
 import { registrarUsuarioCasoDeUso } from "../../application/use-cases/registrarUsuario.js";
 import { activarCuentaCasoDeUso } from "../../application/use-cases/activarCuenta.js";
@@ -130,10 +130,8 @@ export const reenviarCodigoController = async (req: Request, res: Response) => {
   }
 };
 
-// POST /registro/google/verificar  { idToken }
-// Paso 1 del registro con Google: verifica el token y avisa si la cuenta
-// ya existe. Si es cuenta nueva, devuelve el perfil de Google (email,
-// nombre, apellido, googleId) para que el frontend complete lo que falta.
+// POST /registro/google/verificar /idToken 
+
 export const verificarCuentaGoogleController = async (req: Request, res: Response) => {
   try {
     const { idToken } = req.body;
@@ -163,9 +161,8 @@ export const verificarCuentaGoogleController = async (req: Request, res: Respons
   }
 };
 
-// POST /registro/google  { googleId, email, nombre, apellido, fecha_nacimiento, celular }
-// Paso 2: crea la cuenta ya con celular y fecha de nacimiento. Queda activa
-// directo (Google ya verificó el email).
+// POST /registro/google () googleId, email, nombre, apellido, fecha_nacimiento, celular )
+
 export const registrarConGoogleController = async (req: Request, res: Response) => {
   try {
     const { googleId, email, nombre, apellido, fecha_nacimiento, celular, acepta_terminos } = req.body;

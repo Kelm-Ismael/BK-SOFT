@@ -1,14 +1,10 @@
-// Archivo NUEVO — Escenario 2 (Registrarse) por canal Google SSO, paso 2.
-//
-// Se llama después de que el usuario completó celular y fecha de
-// nacimiento en la pantalla intermedia. La cuenta queda "activa" directo:
-// Google ya verificó el email, así que no hace falta el código de 6
-// dígitos que usa el registro por email.
+//(Registrarse) por canal Google SSO
+
 import { crearUsuario, buscarUsuarioPorEmail } from "../../infrastructure/repositories/usuario.repository.js";
 import { crearClienteGoogle, buscarClientePorGoogleId } from "../../infrastructure/repositories/cliente.repository.js";
 import { registrarEventoAuditoria } from "../../infrastructure/repositories/logAuditoria.repository.js";
 import { validarCelular, validarFechaNacimiento } from "../../infrastructure/validation/registroValidaciones.util.js";
-// CU-01, RN9 — constancia de aceptación de Términos y Política de Privacidad
+
 import { registrarAceptacionTerminos } from "../../infrastructure/repositories/aceptacionTerminos.repository.js";
 
 interface DatosRegistroGoogle {
@@ -47,13 +43,10 @@ export const registrarConGoogleCasoDeUso = async (datos: DatosRegistroGoogle) =>
     throw new Error("El celular debe empezar con + y el código de país, seguido del número (entre 8 y 15 dígitos, sin espacios ni guiones)");
   }
 
-  // CU-01, RN9: la casilla de Términos y Política es obligatoria
   if (acepta_terminos !== true) {
     throw new Error("Tenés que aceptar los Términos y Condiciones y la Política de Privacidad");
   }
 
-  // Re-chequeo: puede haber pasado tiempo entre el paso 1 (verificar token)
-  // y que la persona complete este formulario.
   const usuarioExistente = await buscarUsuarioPorEmail(email);
   if (usuarioExistente) {
     throw new Error("Ya existe una cuenta registrada con ese email");
@@ -63,7 +56,6 @@ export const registrarConGoogleCasoDeUso = async (datos: DatosRegistroGoogle) =>
     throw new Error("Ya existe una cuenta registrada con ese email");
   }
 
-  // Sin password: el acceso a esta cuenta es siempre vía Google.
   const usuario = await crearUsuario(email, null, "activo");
   if (!usuario) {
     throw new Error("No se pudo crear el usuario");

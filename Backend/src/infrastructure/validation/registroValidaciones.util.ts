@@ -1,11 +1,5 @@
-// Archivo NUEVO — validaciones de formato para el registro (Escenario 2).
-// Antes solo se chequeaba que celular y fecha_nacimiento no vinieran vacíos;
-// ahora también se valida que tengan un formato/valor razonable.
+// validaciones de formato para el registro 
 
-// Formato internacional (cualquier país): "+" + código de país + número,
-// todo junto, solo dígitos y entre 8 y 15 dígitos en total (estándar E.164).
-// El primer dígito no puede ser 0 (ningún código de país empieza con 0).
-// Ej. "+543794000000" (Argentina), "+59899123456" (Uruguay), "+14155550123" (EE. UU.).
 const REGEX_CELULAR = /^\+[1-9]\d{7,14}$/;
 
 export const validarCelular = (celular: string): boolean => {
@@ -55,9 +49,8 @@ export const validarFechaNacimiento = (fechaNacimientoStr: string): ResultadoVal
   return { valida: true };
 };
 
-// NUEVO — Regla de negocio #2 del caso de uso CU-01 "Registrarse": la
-// contraseña debe tener una longitud mínima de 8 caracteres e incluir al
-// menos una letra mayúscula, una minúscula y un número.
+// ValidAcion de contraseña
+
 const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
 export const validarPassword = (password: string): boolean => {

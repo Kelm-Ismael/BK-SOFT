@@ -1,9 +1,5 @@
-// Archivo NUEVO — verifica el idToken que manda Google Identity Services
-// desde el frontend. Se usa el endpoint público "tokeninfo" de Google en
-// vez de agregar la dependencia google-auth-library: Google hace la
-// verificación de firma y expiración por nosotros, y acá solo se chequea
-// que el token sea para ESTA aplicación (audience) y que el email esté
-// verificado.
+//verificacion el idToken que manda Google Identity Services
+
 import { GOOGLE_CLIENT_ID } from "../../config/env.js";
 
 export interface PerfilGoogle {

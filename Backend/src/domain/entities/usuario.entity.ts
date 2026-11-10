@@ -1,4 +1,4 @@
-// Tipo de la entidad Usuario (tabla `usuarios`). Solo forma de los datos, sin lógica.
+// Tipo de la entidad Usuario 
 export interface Usuario {
   id_usuario: number;
   email: string;

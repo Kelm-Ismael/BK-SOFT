@@ -10,9 +10,6 @@ app.use(cors());
 
 app.use(express.json());
 
-// Sirve el frontend estático (carpeta "Frontend", hermana de "Backend") desde el mismo server.
-// Así http://localhost:3000/ abre index.html y http://localhost:3000/pages/registro.html
-// abre la pantalla de registro, todo en el mismo origen que la API (sin problemas de CORS).
 const FRONTEND_DIR = path.resolve(process.cwd(), "..", "Frontend");
 app.use(express.static(FRONTEND_DIR));
 

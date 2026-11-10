@@ -1,15 +1,9 @@
-
-
-
-// Archivo — lógica de la pantalla "Confirmá tu cuenta" (confirmar-cuenta.html)
+// confirmar cuenta
 import { postDatos } from "../core/api.js";
 import { API_VERIFICAR_CUENTA, API_REENVIAR_CODIGO } from "../core/config.js";
 
 const COOLDOWN_INICIAL_SEGUNDOS = 60;
 
-// Si venís recién de registrarte, el email ya quedó guardado acá.
-// Si entrás directo por el link "Activar cuenta", esto va a ser null
-// y el campo de email queda vacío para que lo tipees vos.
 const emailGuardado = sessionStorage.getItem("emailVerificacion");
 
 const inputEmail = document.getElementById("email");
@@ -29,7 +23,7 @@ function obtenerEmail() {
     return inputEmail.value.trim();
 }
 
-// ── Casilleros de 6 dígitos: avanzar/retroceder foco automáticamente ──
+//Casilleros de 6 dígitos
 casilleros.forEach((casillero, indice) => {
 
     casillero.addEventListener("input", () => {
@@ -108,9 +102,7 @@ formulario.addEventListener("submit", async (evento) => {
             return;
         }
 
-        // CU-01, paso 10: el sistema activa la cuenta e informa que fue
-        // activada. El caso de uso termina acá (no hay pantalla de login),
-        // así que vuelve al inicio.
+        // CUENTA ACTIVADA
         sessionStorage.removeItem("emailVerificacion");
         mensaje.textContent = "Cuenta activada.";
         mensaje.classList.add("exito");
@@ -120,7 +112,7 @@ formulario.addEventListener("submit", async (evento) => {
         textoCooldown.textContent = "";
         formulario.querySelectorAll("input, button").forEach((elemento) => (elemento.disabled = true));
 
-        // Después de mostrar el mensaje, vuelve a la página de inicio
+        // Redirige a la página de inicio
         setTimeout(() => {
             window.location.href = "../index.html";
         }, 2000);
@@ -153,7 +145,7 @@ botonReenviar.addEventListener("click", async () => {
             mensaje.textContent = cuerpo.message || "No se pudo reenviar el código.";
             mensaje.classList.add("error");
 
-            // Si el error es de cooldown (429), igual arrancamos la cuenta regresiva visual
+            // error 429: demasiadas solicitudes (cooldown)
             if (respuesta.status === 429) {
                 iniciarCooldown(COOLDOWN_INICIAL_SEGUNDOS);
             }
@@ -173,10 +165,7 @@ botonReenviar.addEventListener("click", async () => {
     }
 });
 
-// El cooldown solo arranca corriendo si venís recién de registrarte (ya se
-// mandó un código automáticamente). Si entraste por "Activar cuenta" sin
-// haber pasado por el registro recién, el botón "Reenviar" queda disponible
-// de entrada para que puedas pedir el primer envío de esta sesión.
+
 if (emailGuardado) {
     iniciarCooldown(COOLDOWN_INICIAL_SEGUNDOS);
 }

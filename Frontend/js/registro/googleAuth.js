@@ -1,13 +1,4 @@
-// Archivo NUEVO — login/registro con Google en la pantalla "Crear cuenta".
-// Google Identity Services (biblioteca oficial, cargada en registro.html)
-// nos da un idToken firmado por Google; se lo mandamos al backend, que lo
-// verifica y nos dice si ya existe cuenta o si hay que completar el
-// registro (celular + fecha de nacimiento, que Google no provee).
-//
-// Alcance acordado: esto SOLO cubre cuentas nuevas. Si el backend dice que
-// ya existe una cuenta con ese email/Google ID, se muestra el mensaje de
-// error y no se deja entrar (eso ya sería el caso de uso "Iniciar sesión",
-// que sigue en pausa).
+// Crear cuenta con Google
 import { postDatos } from "../core/api.js";
 import { API_REGISTRO_GOOGLE_VERIFICAR, GOOGLE_CLIENT_ID } from "../core/config.js";
 
@@ -34,8 +25,7 @@ const manejarRespuestaGoogle = async (respuestaGoogle) => {
             return;
         }
 
-        // Cuenta nueva: guardamos el perfil verificado y vamos a pedir
-        // celular + fecha de nacimiento antes de terminar el registro.
+        
         sessionStorage.setItem("perfilGoogleRegistro", JSON.stringify(cuerpo.perfil));
         window.location.href = "completar-registro-google.html";
 

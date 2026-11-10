@@ -1,4 +1,4 @@
-// Archivo NUEVO — issue #20
+
 import { pool } from "../../config/db.js";
 
 // Crea el token de verificación para un usuario recién registrado (24h de validez)

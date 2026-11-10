@@ -1,5 +1,5 @@
-// Archivo NUEVO (refinamiento de #21) — botón "Reenviar" de la pantalla
-// "Confirmá tu cuenta": pide un código nuevo cuando el anterior venció o no llegó.
+//  Rennvio de código de verificación por email
+
 import {
   buscarUltimoTokenPorUsuario,
   invalidarToken,
@@ -9,7 +9,7 @@ import { buscarUsuarioPorEmail } from "../../infrastructure/repositories/usuario
 import { generarCodigoVerificacion, calcularVencimientoToken } from "../../infrastructure/security/token.util.js";
 import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js";
 
-// Tiempo mínimo entre reenvíos (coincide con el "Disponible en 59 seg" del mockup)
+// Tiempo minimo entre reenvio 59 segundos
 const COOLDOWN_REENVIO_SEGUNDOS = 60;
 
 export const reenviarCodigoCasoDeUso = async (email: string): Promise<void> => {
@@ -33,7 +33,7 @@ export const reenviarCodigoCasoDeUso = async (email: string): Promise<void> => {
       throw new Error(`Esperá ${restante} segundos antes de pedir un código nuevo`);
     }
 
-    // Invalida el código anterior si todavía estaba activo (que no queden dos códigos válidos a la vez)
+    // Invalida el código anterior si todavía estaba activo
     if (ultimoToken.estado_token === "activo") {
       await invalidarToken(ultimoToken.id_token);
     }

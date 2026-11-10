@@ -1,7 +1,4 @@
-// Archivo NUEVO — issue #21 (Escenario 3: Autenticar cuenta — envío real del mail)
-// Reemplaza el console.log placeholder que había quedado en registrarUsuario.ts (#20).
-// Actualizado: se manda el código de 6 dígitos para que el usuario lo tipee
-// en la pantalla "Confirmá tu cuenta" (antes era un link con el token).
+
 import { transporter } from "./nodemailer.transport.js";
 
 // Envía el mail de verificación de cuenta con el código de 6 dígitos.

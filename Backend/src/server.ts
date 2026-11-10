@@ -1,4 +1,4 @@
-// src/server.ts — punto de entrada del backend.
+// Punto de entrada A backend.
 
 import { app } from './app.js';
 import { conexion_db } from '../src/config/db.js';

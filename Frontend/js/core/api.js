@@ -1,6 +1,6 @@
-// Archivo NUEVO — helpers de fetch compartidos por todos los módulos del frontend.
+// Fetch con backend
 
-// Devuelve la Response cruda: quien llama decide qué hacer con .ok y llama a .json().
+// POST
 export async function postDatos(url, datos) {
     return fetch(url, {
         method: "POST",

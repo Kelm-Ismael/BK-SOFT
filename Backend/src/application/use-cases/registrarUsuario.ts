@@ -1,17 +1,16 @@
 // Archivo NUEVO — issue #20 (modificado en #21 para el envío real del mail)
-// Orquesta el Escenario 2 completo por canal EMAIL (WhatsApp y Google SSO
-// quedan fuera de este sprint: no están entre los issues #19-22).
+
 import { crearUsuario, buscarUsuarioPorEmail } from "../../infrastructure/repositories/usuario.repository.js";
 import { crearCliente } from "../../infrastructure/repositories/cliente.repository.js";
 import { crearToken } from "../../infrastructure/repositories/tokenVerificacion.repository.js";
 import { registrarEventoAuditoria } from "../../infrastructure/repositories/logAuditoria.repository.js";
 import { encriptarPassword } from "../../infrastructure/security/password.util.js";
 import { generarCodigoVerificacion, calcularVencimientoToken } from "../../infrastructure/security/token.util.js";
-// NUEVO (issue #21) — envío real del mail de verificación
-import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js";
+
+import { enviarCorreoVerificacion } from "../../infrastructure/email/correoVerificacion.service.js"; // envío del mail de verificación
 import { validarCelular, validarFechaNacimiento, validarPassword } from "../../infrastructure/validation/registroValidaciones.util.js";
-// CU-01, RN9 — constancia de aceptación de Términos y Política de Privacidad
-import { registrarAceptacionTerminos } from "../../infrastructure/repositories/aceptacionTerminos.repository.js";
+
+import { registrarAceptacionTerminos } from "../../infrastructure/repositories/aceptacionTerminos.repository.js"; // constancia de aceptación de Términos y Política de Privacidad
 
 interface DatosRegistro {
   email: string;
@@ -33,8 +32,8 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
   if (!password) {
     throw new Error("La contraseña es obligatoria");
   }
-  // Regla de negocio #2 (CU-01 Registrarse): mínimo 8 caracteres, con al
-  // menos una mayúscula, una minúscula y un número.
+  //mínimo 8 caracteres
+
   if (!validarPassword(password)) {
     throw new Error("La contraseña debe tener al menos 8 caracteres, con al menos una mayúscula, una minúscula y un número");
   }
@@ -58,7 +57,7 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
     throw new Error("El celular debe empezar con + y el código de país, seguido del número (entre 8 y 15 dígitos, sin espacios ni guiones)");
   }
 
-  // CU-01, RN9: la casilla de Términos y Política es obligatoria
+  // casilla de Términos y Política es obligatoria
   if (acepta_terminos !== true) {
     throw new Error("Tenés que aceptar los Términos y Condiciones y la Política de Privacidad");
   }
@@ -70,7 +69,7 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
 
   const passwordHash = await encriptarPassword(password);
 
-  // Canal email: la cuenta nace "pendiente" hasta que se verifique el token
+  // Cuenta "pendiente" hasta que se verifique el token
   const usuario = await crearUsuario(email, passwordHash, "pendiente");
   if (!usuario) {
     throw new Error("No se pudo crear el usuario");
@@ -93,7 +92,7 @@ export const registrarUsuarioCasoDeUso = async (datos: DatosRegistro) => {
   const tokenExpira = calcularVencimientoToken();
   const token = await crearToken(usuario.id_usuario, tokenValidacion, tokenExpira);
 
-  // issue #21: envío real del email con el link de verificación
+  // envío real del email con el link de verificación
   await enviarCorreoVerificacion(email, tokenValidacion);
 
   await registrarEventoAuditoria(cliente.id_cliente, "registro_usuario");

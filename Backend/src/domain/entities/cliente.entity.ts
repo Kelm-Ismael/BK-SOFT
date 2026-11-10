@@ -1,4 +1,4 @@
-// Tipo de la entidad Cliente (tabla `clientes`, tabla-per-type de Usuario).
+// Tipo de la entidad Cliente 
 export interface Cliente {
   id_cliente: number; // == id_usuario
   nombre: string;
